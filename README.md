@@ -17,3 +17,11 @@ And we will use that photo information to generate some sort-of avaatar for you
 4. It will generate a result
 
 ## Demo link
+
+## Image sample
+
+![Alt text](./docs/upload_ui.png?raw=true "Upload UI")
+![Alt text](./docs/sample_1.png?raw=true "Sample 1")
+![Alt text](./docs/sample_2.png?raw=true "Sample 2")
+![Alt text](./docs/sample_3.png?raw=true "Sample 3")
+![Alt text](./docs/sample_4.png?raw=true "Sample 4")
