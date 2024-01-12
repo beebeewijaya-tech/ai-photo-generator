@@ -1,7 +1,7 @@
 import datetime
 from typing import List
 
-from fastapi import APIRouter, HTTPException, UploadFile
+from fastapi import APIRouter, HTTPException, UploadFile, Request
 
 from managers.auth import AuthManager
 from managers.image import ImageManager
@@ -13,12 +13,12 @@ router = APIRouter(
 
 
 @router.post("/generate")
-async def generate_image(files: List[UploadFile]):
-    ip_addr = await AuthManager.get_api_info()
-    get_ip_session = await AuthManager.get_session(ip_addr["ip"])
+async def generate_image(files: List[UploadFile], request: Request):
+    ip_addr = request.headers.get("Ip-Address")
+    get_ip_session = await AuthManager.get_session(ip_addr)
     if get_ip_session is None:
         data = {
-            "ip_address": ip_addr["ip"],
+            "ip_address": ip_addr,
             "usage": "1",
             "created_at": datetime.datetime.now()
         }
@@ -29,7 +29,7 @@ async def generate_image(files: List[UploadFile]):
             raise HTTPException(400, "Already reach maximum limit, contact the administrator: beebeewijaya@gmail.com")
         usage += 1
         data = {
-            "ip_address": ip_addr["ip"],
+            "ip_address": ip_addr,
             "usage": f"{usage}",
         }
         await AuthManager.update_session(data)

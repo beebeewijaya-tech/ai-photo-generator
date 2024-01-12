@@ -120,6 +120,10 @@
                     }
                     this.drag = false
                 },
+                async getIp() {
+                    const {data} = await axios.get("https://ipinfo.io?token=1cacb7af0731de")
+                    return data.ip
+                },
                 async submit() {
                     if (this.submitting) {
                         return
@@ -129,10 +133,15 @@
                         formData.append("files", file);
                     }
 
+                    const ip = await this.getIp()
+
                     try {
                         this.submitting = true
                         const {data} = await axios.post('/image/generate', formData, {
-                            'Content-Type': 'multipart/form-data',
+                            headers: {
+                                'Content-Type': 'multipart/form-data',
+                                'Ip-Address': ip,
+                            }
                         })
 
                         this.aiResult = data
