@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from functools import lru_cache
 
 import uvicorn
@@ -5,6 +6,7 @@ from fastapi import FastAPI, Request, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+from db.conn import db
 from routers.general import router as general_routes
 from routers.image import router as image_routes
 from routers.video import router as video_routes
@@ -18,7 +20,16 @@ def get_templates(req: Request):
     return req
 
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await db.database.connect()
+    yield
+
+    await db.database.disconnect()
+
+
 app = FastAPI(
+    lifespan=lifespan,
     dependencies=[Depends(get_templates)]
 )
 

@@ -36,6 +36,7 @@
                         Drag your photo here
                     </h1>
                 </div>
+                <p class="text-red-600 text-center mt-5" v-if="errorMesage">{{ errorMesage }}</p>
                 <div class="text-center mb-12">
                     <button class="px-4 py-2 rounded-sm text-white bg-slate-700 hover:bg-slate-600 text-sm mt-5 mb-4"
                             @click="submit" :disabled="submitting">
@@ -79,7 +80,8 @@
                     filename: '',
                     drag: false,
                     submitting: false,
-                    aiResult: ''
+                    aiResult: '',
+                    errorMesage: ''
                 }
             },
             methods: {
@@ -136,13 +138,12 @@
                         this.aiResult = data
                     } catch (e) {
                         console.error(e)
+                        this.errorMesage = e.response.data.detail
                     } finally {
                         this.submitting = false
                     }
-                }
+                },
             },
-            mounted() {
-            }
         })
     </script>
 {% endblock script %}
